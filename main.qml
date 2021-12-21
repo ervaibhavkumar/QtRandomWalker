@@ -26,38 +26,37 @@ Window {
         property int xCoord: window.width / 2
         property int yCoord: window.height / 2
         readonly property int radius: 6
+        property vector2d current: Qt.vector2d(window.width / 2, window.height / 2)
+        property vector2d prev: current
 
         onPaint: {
             var ctx = canvas.getContext("2d")
 
-            var num = Math.floor( Math.random() * 4 )
+            var num = Qt.vector2d(25, 25)
+            var directionX = ( Math.random() * 2 ) - 1
+            var directionY = ( Math.random() * 2 ) - 1
+            console.log(directionX, directionY)
 
-            switch (num) {
-            case 0: {
-                xCoord += radius;
-                break;
-            }
-            case 1: {
-                xCoord -= radius;
-                break;
-            }
-            case 2: {
-                yCoord += radius;
-                break;
-            }
-            case 3: {
-                yCoord -= radius;
-                break;
-            }
-            }
+            num = num.times(Qt.vector2d(directionX, directionY))
+
+            current = current.plus(num)
 
             ctx.save();
             ctx.beginPath();
-            console.log(1)
+
+            ctx.lineWidth = 2;
             ctx.fillStyle = "red";
-            ctx.moveTo(xCoord, yCoord);
-            ctx.ellipse(xCoord, yCoord, radius, radius)
+            ctx.strokeStyle = "blue";
+
+            ctx.moveTo(prev.x, prev.y)
+            ctx.lineTo(current.x, current.y);
+            ctx.ellipse(current.x, current.y, radius, radius);
+
+            ctx.closePath();
             ctx.fill();
+            ctx.stroke();
+            prev = current;
+
         }
     }
 }
