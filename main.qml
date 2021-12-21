@@ -32,14 +32,22 @@ Window {
         onPaint: {
             var ctx = canvas.getContext("2d")
 
-            var num = Qt.vector2d(25, 25)
+            var step;
+            var probability = Math.random() * 100
             var directionX = ( Math.random() * 2 ) - 1
             var directionY = ( Math.random() * 2 ) - 1
             console.log(directionX, directionY)
 
-            num = num.times(Qt.vector2d(directionX, directionY))
+            if ( probability < 5 )  {
+                // Take levy's flight and go to some other direction
+                step = Qt.vector2d(Math.floor( Math.random() * 25 ) + 75,
+                                  Math.floor( Math.random() * 25 ) + 75 )
+            } else {
+                step = Qt.vector2d(5,5)
+            }
 
-            current = current.plus(num)
+            step = step.times(Qt.vector2d(directionX, directionY))
+            current = current.plus(step)
 
             ctx.save();
             ctx.beginPath();
